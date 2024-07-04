@@ -1,0 +1,106 @@
+.hadesboard-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: -10px; /* Adjust spacing as needed */
+}
+
+.hadesboard-gallery-item {
+  width: calc(50% - 20px); /* Adjust for mobile view */
+  margin: 10px; /* Adjust spacing */
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.hadesboard-gallery-item img,
+.hadesboard-gallery-item video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 15px !important;
+  filter: grayscale(1);
+  transition: all ease 0.5s;
+}
+
+.hadesboard-gallery-item video {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.hadesboard-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hadesboard-gallery-item:hover .hadesboard-overlay {
+  opacity: 1;
+  cursor: zoom-in;
+}
+
+.hadesboard-gallery-item:hover {
+  cursor: zoom-in;
+}
+
+.hadesboard-gallery-item:hover img,
+.hadesboard-gallery-item:hover video {
+  filter: grayscale(0);
+}
+
+/* Modal Styling */
+.hb-modal {
+  display: none;
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hb-modal .modal-content {
+  background-color: #fefefe;
+  margin: 8% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  position: relative;
+}
+
+.hb-modal .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.hb-modal .modal-body {
+  padding: 20px;
+}
+
+/* Optionally style images and videos within the modal */
+.hb-modal .modal-body img,
+.hb-modal .modal-body video {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (min-width: 992px) {
+  .hadesboard-gallery-item {
+    width: calc(10% - 20px); /* Adjust for desktop view */
+  }
+}
