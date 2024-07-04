@@ -44,11 +44,15 @@ class HADESBOARD_GALLERY_SHORTCODE {
 
         <!-- Modal Structure -->
         <div class="hb-modal" id="hadesboardModal">
+            <span class="close">&times;</span>
             <div class="modal-content">
-                <span class="close">&times;</span>
                 <div class="modal-body">
                     <!-- Content will be loaded dynamically via AJAX -->
                 </div>
+            </div>
+            <div class="modal-navigation">
+                <button id="prevButton" disabled="true">&#11207;</button>
+                <button id="nextButton" disabled="true">&#11208;</button>
             </div>
         </div>
         

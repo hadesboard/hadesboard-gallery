@@ -33,11 +33,13 @@ jQuery(document).ready(function ($) {
     }
   });
 
+  var currentGalleryId;
+
   // Open modal when clicking on .open-modal link
   $(".open-modal").on("click", function (e) {
     e.preventDefault();
-    var galleryId = $(this).data("gallery-id");
-    fetchGalleryItem(galleryId);
+    currentGalleryId = $(this).data("gallery-id");
+    fetchGalleryItem(currentGalleryId);
     $("#hadesboardModal").css("display", "block");
   });
 
@@ -47,7 +49,7 @@ jQuery(document).ready(function ($) {
   });
 
   // Prevent modal from closing when clicking inside modal content
-  $(".modal-content").on("click", function (e) {
+  $(".modal-content, .modal-navigation").on("click", function (e) {
     e.stopPropagation();
   });
 
@@ -61,11 +63,54 @@ jQuery(document).ready(function ($) {
         post_id: galleryId, // Send the post ID to retrieve specific content
       },
       success: function (response) {
-        $(".modal-body").html(response.data);
+        if (response.success) {
+          $(".modal-body").html(response.data.html);
+          updateNavigationButtons(
+            response.data.prev_post_id,
+            response.data.next_post_id
+          );
+        }
       },
       error: function (error) {
         console.error("Error fetching gallery item:", error);
       },
     });
   }
+
+  function updateNavigationButtons(prevPostId, nextPostId) {
+    var $prevButton = $("#prevButton");
+    var $nextButton = $("#nextButton");
+
+    if (prevPostId) {
+      $prevButton.attr("disabled", false);
+      $prevButton.data("gallery-id", prevPostId);
+    } else {
+      $prevButton.attr("disabled", true);
+    }
+
+    if (nextPostId) {
+      $nextButton.attr("disabled", false);
+      $nextButton.data("gallery-id", nextPostId);
+    } else {
+      $nextButton.attr("disabled", true);
+    }
+  }
+
+  // Previous button click handler
+  $("#prevButton").on("click", function () {
+    var prevId = $(this).data("gallery-id");
+    if (prevId) {
+      currentGalleryId = prevId;
+      fetchGalleryItem(currentGalleryId);
+    }
+  });
+
+  // Next button click handler
+  $("#nextButton").on("click", function () {
+    var nextId = $(this).data("gallery-id");
+    if (nextId) {
+      currentGalleryId = nextId;
+      fetchGalleryItem(currentGalleryId);
+    }
+  });
 });
