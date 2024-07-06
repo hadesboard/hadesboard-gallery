@@ -69,6 +69,20 @@ jQuery(document).ready(function ($) {
             response.data.prev_post_id,
             response.data.next_post_id
           );
+          $("[data-fancybox]").fancybox({
+            loop: true,
+            buttons: [
+              "zoom",
+              "share",
+              "slideShow",
+              "fullScreen",
+              "download",
+              "thumbs",
+              "close",
+            ],
+            animationEffect: "zoom-in-out",
+            transitionEffect: "slide",
+          });
         }
       },
       error: function (error) {
@@ -112,5 +126,20 @@ jQuery(document).ready(function ($) {
       currentGalleryId = nextId;
       fetchGalleryItem(currentGalleryId);
     }
+  });
+
+  $("[data-fancybox]").fancybox({
+    loop: true,
+    buttons: [
+      "zoom",
+      "share",
+      "slideShow",
+      "fullScreen",
+      "download",
+      "thumbs",
+      "close",
+    ],
+    animationEffect: "zoom-in-out",
+    transitionEffect: "slide",
   });
 });

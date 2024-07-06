@@ -50,17 +50,24 @@ class HADESBOARD_GALLERY_AJAX {
                         if ($attachment) {
                             $attachment_type = $attachment->post_mime_type;
                             $attachment_url = wp_get_attachment_url($attachment_id);
+                            $attachment_title = esc_attr(get_the_title($attachment_id));
+                            $attachment_full = wp_get_attachment_image_src($attachment_id, 'full');
 
                             if (strpos($attachment_type, 'image') !== false) {
-                                $html .= '<img src="' . esc_url($attachment_url) . '" alt="' . esc_attr(get_the_title($attachment_id)) . '">';
+                                // Link to open image in LightGallery
+                                $html .= '<a href="' . esc_url($attachment_full[0]) .'" data-fancybox="gallery"  data-caption="' . $attachment_title . '">';
+                                $html .= '<img src="' . esc_url($attachment_url) . '" alt="' . $attachment_title . '">';
+                                $html .= '</a>';
                             } elseif (strpos($attachment_type, 'video') !== false) {
+                                // Video handling for LightGallery
+                                $html .= '<a href="' . esc_url($attachment_url) . '" data-fancybox="gallery" data-caption="' . $attachment_title . '">';
                                 $html .= '<video controls><source src="' . esc_url($attachment_url) . '" type="' . esc_attr($attachment_type) . '"></video>';
+                                $html .= '</a>';
                             }
                         }
                     }
                     $html .= '</div>';
                 }
-
                 // Get next and previous post IDs
                 $prev_post_id = get_adjacent_post(false, '', false);
                 $next_post_id = get_adjacent_post(false, '', true);
