@@ -76,7 +76,7 @@
   margin: 8% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 100%;
   position: relative;
 }
 
@@ -158,6 +158,14 @@
   background-color: #6b7379;
 }
 
+.modal-navigation button svg {
+  fill: white;
+}
+
+[data-fancybox="gallery"] {
+  width: 100%;
+}
+
 .modal-navigation button:disabled {
   background: none;
   color: transparent;
@@ -168,4 +176,43 @@
   .hadesboard-gallery-item {
     width: calc(10% - 20px); /* Adjust for desktop view */
   }
+
+  .hb-modal .modal-content {
+    width: 65%;
+  }
+}
+
+/* Like button */
+
+.like-section {
+  text-align: center;
+  padding: 1.3em;
+}
+
+.like-section #likeButton {
+  border: none;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  background: #0057ff;
+  color: white;
+}
+
+.like-section #likeButton i {
+  font-size: 24px;
+}
+
+.like-section #likeButton:hover {
+  background-color: #0046cc;
+}
+
+.like-section #likeButton.liked {
+  background-color: #232323 !important;
+  color: red !important;
+}
+
+.like-section #likeCount {
+  display: block;
+  padding: 10px;
+  color: black;
 }

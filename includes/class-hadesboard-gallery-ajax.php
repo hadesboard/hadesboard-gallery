@@ -10,6 +10,8 @@ class HADESBOARD_GALLERY_AJAX {
         // Hook to handle AJAX requests for logged-in and non-logged-in users
         add_action('wp_ajax_get_gallery_item', [$this, 'get_gallery_item_callback']);
         add_action('wp_ajax_nopriv_get_gallery_item', [$this, 'get_gallery_item_callback']);
+        add_action('wp_ajax_toggle_like_gallery_item', [$this, 'toggle_like_gallery_item']);
+        add_action('wp_ajax_nopriv_toggle_like_gallery_item', [$this, 'toggle_like_gallery_item']);
     }
 
     public function get_gallery_item_callback() {
@@ -34,6 +36,7 @@ class HADESBOARD_GALLERY_AJAX {
                 $title = get_the_title();
                 $content = apply_filters('the_content', get_the_content());
                 $gallery = get_post_meta($post_id, 'gallery', true);
+                $liked_count = get_post_meta($post_id, 'like_count', true);
 
                 // Prepare HTML to return as AJAX response
                 $html = '<h2>' . esc_html($title) . '</h2>';
@@ -77,6 +80,8 @@ class HADESBOARD_GALLERY_AJAX {
                     'html' => $html,
                     'prev_post_id' => $prev_post_id ? $prev_post_id->ID : null,
                     'next_post_id' => $next_post_id ? $next_post_id->ID : null,
+                    'like_count' => $liked_count ? $liked_count : 0,
+                    'post_id' => $post_id ? $post_id : 0
                 ]);
             }
             wp_reset_postdata();
@@ -85,6 +90,70 @@ class HADESBOARD_GALLERY_AJAX {
         }
 
         wp_die();
+    }
+
+    function toggle_like_gallery_item() {
+        if (!isset($_POST['post_id'])) {
+            wp_send_json_error('Invalid post ID.');
+            return;
+        }
+
+        $post_id = intval($_POST['post_id']);
+        $like_count = get_post_meta($post_id, 'like_count', true);
+        if (!$like_count) {
+            $like_count = 0;
+        }
+
+        $liked = false;
+        if (is_user_logged_in()) {
+            $user_id = get_current_user_id();
+            $liked_posts = get_user_meta($user_id, '_liked_posts', true);
+            if (!$liked_posts) {
+                $liked_posts = [];
+            }
+
+            if (in_array($post_id, $liked_posts)) {
+                // Unlike the post
+                $liked_posts = array_diff($liked_posts, [$post_id]);
+                $like_count--;
+                $liked = false;
+            } else {
+                // Like the post
+                $liked_posts[] = $post_id;
+                $like_count++;
+                $liked = true;
+            }
+
+            update_user_meta($user_id, '_liked_posts', $liked_posts);
+        } else {
+            // Handle non-logged-in users
+            if (isset($_COOKIE['liked_posts'])) {
+                $liked_posts = json_decode(stripslashes($_COOKIE['liked_posts']), true);
+            } else {
+                $liked_posts = [];
+            }
+
+            if (in_array($post_id, $liked_posts)) {
+                // Unlike the post
+                $liked_posts = array_diff($liked_posts, [$post_id]);
+                $like_count--;
+                $liked = false;
+            } else {
+                // Like the post
+                $liked_posts[] = $post_id;
+                $like_count++;
+                $liked = true;
+            }
+
+            setcookie('liked_posts', json_encode($liked_posts), time() + (10 * 365 * 24 * 60 * 60), '/');
+        }
+
+        update_post_meta($post_id, 'like_count', $like_count);
+
+        wp_send_json_success([
+            'like_count' => $like_count,
+            'liked' => $liked,
+        ]);
     }
 
 }

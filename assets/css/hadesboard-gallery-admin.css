@@ -30,3 +30,17 @@
   max-width: 100%;
   margin-top: 10px;
 }
+
+#image_cover_preview {
+  max-width: 300px;
+}
+
+#image_cover_container,
+#video_cover_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 10px;
+}

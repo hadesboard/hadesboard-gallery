@@ -54,6 +54,7 @@ class HADESBOARD_GALLERY_CPT {
         add_meta_box('hadesboard-gallery-meta', __('Gallery', 'hadesboard-gallery'), array($this, 'render_gallery_meta_box'), 'hadesboard_gallery', 'normal', 'high');
         add_meta_box('hadesboard-gallery-image-cover-meta', __('Image Cover', 'hadesboard-gallery'), array($this, 'render_image_cover_meta_box'), 'hadesboard_gallery', 'normal', 'default');
         add_meta_box('hadesboard-gallery-video-cover-meta', __('Video Cover', 'hadesboard-gallery'), array($this, 'render_video_cover_meta_box'), 'hadesboard_gallery', 'normal', 'default');
+        add_meta_box('hadesboard-gallery-like-meta', __('Like Count', 'hadesboard-gallery'), array($this, 'render_like_meta_box'), 'hadesboard_gallery', 'normal', 'default');
     }
 
     public function render_gallery_meta_box($post) {
@@ -91,7 +92,7 @@ class HADESBOARD_GALLERY_CPT {
         ?>
         <div id="image_cover_container">
             <input type="hidden" id="image_cover" name="image_cover" value="<?php echo esc_attr($image_cover); ?>">
-            <img id="image_cover_preview" src="<?php echo esc_url($image_url); ?>" style="max-width: 100%; <?php echo $image_url ? '' : 'display: none;'; ?>">
+            <img id="image_cover_preview" src="<?php echo esc_url($image_url); ?>" style="<?php echo $image_url ? '' : 'display: none;'; ?>">
             <button type="button" class="button" id="add_image_cover"><?php _e('Set Image Cover', 'hadesboard-gallery'); ?></button>
             <button type="button" class="button" id="remove_image_cover" style="<?php echo $image_cover ? '' : 'display: none;'; ?>"><?php _e('Remove Image Cover', 'hadesboard-gallery'); ?></button>
         </div>
@@ -105,9 +106,19 @@ class HADESBOARD_GALLERY_CPT {
         ?>
         <div id="video_cover_container">
             <input type="hidden" id="video_cover" name="video_cover" value="<?php echo esc_attr($video_cover); ?>">
-            <video id="video_cover_preview" src="<?php echo esc_url($video_url); ?>" style="max-width: 100%; <?php echo $video_url ? '' : 'display: none;'; ?>" controls></video>
+            <video id="video_cover_preview" src="<?php echo esc_url($video_url); ?>" style="<?php echo $video_url ? '' : 'display: none;'; ?>" controls></video>
             <button type="button" class="button" id="add_video_cover"><?php _e('Set Video Cover', 'hadesboard-gallery'); ?></button>
             <button type="button" class="button" id="remove_video_cover" style="<?php echo $video_cover ? '' : 'display: none;'; ?>"><?php _e('Remove Video Cover', 'hadesboard-gallery'); ?></button>
+        </div>
+        <?php
+    }
+
+    public function render_like_meta_box($post) {
+        $like_count = get_post_meta($post->ID, 'like_count', true);
+        ?>
+        <div id="like_count_container">
+            <p><?php echo __('Like Count:', 'hadesboard-gallery'); ?> <strong><?php echo intval($like_count); ?></strong></p>
+            <input type="number" id="like_count" name="like_count" value="<?php echo esc_attr($like_count); ?>">
         </div>
         <?php
     }
@@ -130,6 +141,11 @@ class HADESBOARD_GALLERY_CPT {
         // Save video cover
         if (isset($_POST['video_cover'])) {
             update_post_meta($post_id, 'video_cover', sanitize_text_field($_POST['video_cover']));
+        }
+
+        // Save like count
+        if (isset($_POST['like_count'])) {
+            update_post_meta($post_id, 'like_count', sanitize_text_field($_POST['like_count']));
         }
     }
 }
