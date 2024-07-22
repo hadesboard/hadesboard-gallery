@@ -7,6 +7,7 @@ class HADESBOARD_GALLERY_CPT {
 
     public function __construct() {
         add_action('init', array($this, 'register_gallery_post_type'));
+        add_action('init', array($this, 'register_gallery_taxonomy'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
     }
 
@@ -30,7 +31,7 @@ class HADESBOARD_GALLERY_CPT {
             'has_archive' => true,
             'supports' => array('title', 'editor', 'thumbnail'),
             'show_in_rest' => true,
-            'taxonomies' => array('category', 'post_tag'),
+            'taxonomies' => array('gallery_category', 'post_tag'),
             'menu_icon' => 'dashicons-format-gallery',
         );
 
@@ -41,6 +42,33 @@ class HADESBOARD_GALLERY_CPT {
 
         // Save meta box data
         add_action('save_post_hadesboard_gallery', array($this, 'save_meta_boxes'), 10, 2);
+    }
+
+    public function register_gallery_taxonomy() {
+        $labels = array(
+            'name' => __('Gallery Categories', 'hadesboard-gallery'),
+            'singular_name' => __('Gallery Category', 'hadesboard-gallery'),
+            'search_items' => __('Search Gallery Categories', 'hadesboard-gallery'),
+            'all_items' => __('All Gallery Categories', 'hadesboard-gallery'),
+            'parent_item' => __('Parent Gallery Category', 'hadesboard-gallery'),
+            'parent_item_colon' => __('Parent Gallery Category:', 'hadesboard-gallery'),
+            'edit_item' => __('Edit Gallery Category', 'hadesboard-gallery'),
+            'update_item' => __('Update Gallery Category', 'hadesboard-gallery'),
+            'add_new_item' => __('Add New Gallery Category', 'hadesboard-gallery'),
+            'new_item_name' => __('New Gallery Category Name', 'hadesboard-gallery'),
+            'menu_name' => __('Gallery Categories', 'hadesboard-gallery'),
+        );
+
+        $args = array(
+            'hierarchical' => true,
+            'labels' => $labels,
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'query_var' => true,
+            'rewrite' => array('slug' => 'gallery-category'),
+        );
+
+        register_taxonomy('gallery_category', array('hadesboard_gallery'), $args);
     }
 
     public function enqueue_scripts() {

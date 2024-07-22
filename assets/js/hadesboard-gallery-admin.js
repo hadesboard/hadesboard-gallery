@@ -148,7 +148,7 @@ jQuery(document).ready(function ($) {
     var parent = $(this).closest("li");
     var id = parent.data("id").toString();
     parent.remove();
-    var galleryField = parent.closest(".inside").find('input[type="hidden"]');
+    var galleryField = $("#gallery");
     var gallery = galleryField.val().split(",");
     gallery = gallery.filter(function (item) {
       return item !== id;

@@ -178,7 +178,8 @@
   }
 
   .hb-modal .modal-content {
-    width: 65%;
+    width: calc(100% - 190px);
+    max-width: 1400px;
   }
 }
 
@@ -215,4 +216,33 @@
   display: block;
   padding: 10px;
   color: black;
+}
+
+.fancybox-is-open .fancybox-bg {
+  opacity: 1 !important;
+}
+
+.fancybox-bg {
+  background: black !important;
+}
+
+.hadesboard-gallery-filters {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.filter-button {
+  background-color: #0073aa;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.filter-button:hover,
+.filter-button.active {
+  background-color: #005177;
 }

@@ -31,8 +31,24 @@ jQuery(document).ready(function ($) {
     }
   }
 
-  // Check if all videos are loaded on page load
+  // Initial call to layout Masonry after videos are loaded
   initMasonryAfterVideosLoaded();
+
+  // Filter functionality
+  $(".filter-button").on("click", function () {
+    $(".filter-button").removeClass("active");
+    $(this).addClass("active");
+    var filterValue = $(this).attr("data-category");
+    if (filterValue === "all") {
+      $(".hadesboard-gallery-item").show();
+    } else {
+      $(".hadesboard-gallery-item").hide();
+      $(
+        '.hadesboard-gallery-item[data-category*="' + filterValue + '"]'
+      ).show();
+    }
+    $grid.masonry("layout");
+  });
 
   $(".hadesboard-gallery-item").on("mouseenter", function () {
     const video = $(this).find("video")[0];
@@ -62,11 +78,13 @@ jQuery(document).ready(function ($) {
     currentGalleryId = $(this).data("gallery-id");
     fetchGalleryItem(currentGalleryId);
     $("#hadesboardModal").css("display", "block");
+    $("body").css("overflow", "hidden");
   });
 
   // Close modal when clicking on close button or outside modal content
   $(".close, .hb-modal").on("click", function () {
     $("#hadesboardModal").css("display", "none");
+    $("body").css("overflow", "auto");
   });
 
   // Prevent modal from closing when clicking inside modal content
@@ -92,15 +110,7 @@ jQuery(document).ready(function ($) {
           );
           $("[data-fancybox]").fancybox({
             loop: true,
-            buttons: [
-              "zoom",
-              "share",
-              "slideShow",
-              "fullScreen",
-              "download",
-              "thumbs",
-              "close",
-            ],
+            buttons: ["zoom", "slideShow", "fullScreen", "thumbs", "close"],
             animationEffect: "zoom-in-out",
             transitionEffect: "slide",
           });
