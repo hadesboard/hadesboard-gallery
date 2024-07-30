@@ -65,6 +65,8 @@ class HADESBOARD_GALLERY_SHORTCODE {
         <div class="hb-modal" id="hadesboardModal">
             <span class="close">&times;</span>
             <div class="modal-content">
+                <!-- Loader -->
+                <div class="loader" id="modalLoader"></div>
                 <div class="modal-body">
                     <!-- Content will be loaded dynamically via AJAX -->
                 </div>

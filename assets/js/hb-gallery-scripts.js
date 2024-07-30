@@ -94,6 +94,10 @@ jQuery(document).ready(function ($) {
 
   // Function to fetch gallery item details via AJAX
   function fetchGalleryItem(galleryId) {
+    // Show loader
+    $("#modalLoader").show();
+    $(".modal-body, .like-section").hide();
+
     $.ajax({
       url: hbg_ajax.ajax_url,
       type: "POST",
@@ -118,19 +122,22 @@ jQuery(document).ready(function ($) {
           var likeButton = $("#likeButton");
           likeButton.attr("data-post-id", response.data.post_id);
           var likedPosts = getLikedPosts();
-          console.log(likedPosts);
-          console.log(response.data.post_id);
-          console.log(likedPosts.indexOf(response.data.post_id.toString()));
           if (likedPosts.indexOf(response.data.post_id.toString()) >= 0) {
             likeButton.addClass("liked");
           } else {
             likeButton.removeClass("liked");
           }
           likeCount.text(response.data.like_count);
+          // Hide loader and show content
+          $("#modalLoader").hide();
+          $(".modal-body, .like-section").show();
         }
       },
       error: function (error) {
         console.error("Error fetching gallery item:", error);
+        // Hide loader even on error
+        $("#modalLoader").hide();
+        $(".modal-body, .like-section").show();
       },
     });
   }
